@@ -1,0 +1,29 @@
+{
+  "weights": {
+    "rule_confidence": 0.25,
+    "ai_confidence": 0.25,
+    "attack_frequency": 0.15,
+    "attack_duration": 0.10,
+    "traffic_volume": 0.10,
+    "indicators_matched": 0.05,
+    "historical_reputation": 0.05,
+    "asset_criticality": 0.05
+  },
+  "response_thresholds": {
+    "informational": 20,
+    "low": 40,
+    "medium": 60,
+    "high": 80,
+    "critical": 100
+  },
+  "asset_criticality_overrides": {
+    "192.168.1.10": 1.5,
+    "10.0.0.10": 1.2
+  },
+  "notifications": {
+    "enabled": true,
+    "email_threshold": 61,
+    "webhook_threshold": 61,
+    "report_threshold": 81
+  }
+}

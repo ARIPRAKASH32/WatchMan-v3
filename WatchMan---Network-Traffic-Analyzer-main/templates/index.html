@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WatchMan · Traffic Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/risk.css" />
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- ═══════════════════════════  SIDEBAR  ════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-ring">
+          <svg viewBox="0 0 40 40" width="40" height="40">
+            <circle cx="20" cy="20" r="18" fill="none" stroke="var(--accent)" stroke-width="1.5"
+              stroke-dasharray="4 2" />
+            <circle cx="20" cy="20" r="10" fill="none" stroke="var(--accent2)" stroke-width="1" />
+            <circle cx="20" cy="20" r="3" fill="var(--accent)" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="logo-text">WATCH<span class="accent">MAN</span></h1>
+          <p class="logo-sub">IDS Desktop v2.0</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-target="tab-dashboard"><span class="icon">◈</span> Dashboard</button>
+        <button class="nav-btn" data-target="tab-devices"><span class="icon">🖥️</span> LAN Devices</button>
+        <button class="nav-btn" data-target="tab-alerts" id="navAlertGroup"><span class="icon">⚠</span> Threats <span
+            class="badge" id="navAlertBadge">0</span></button>
+        <button class="nav-btn" data-target="tab-threat-detection" id="navThreatDetectionGroup"><span class="icon">🛡️</span> Threat Detection</button>
+        <button class="nav-btn" data-target="tab-logs"><span class="icon">📄</span> Logs & Reports</button>
+        <button class="nav-btn" data-target="tab-settings"><span class="icon">⚙</span> Settings</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="nav-btn-alt" id="themeToggle"><span class="icon">◑</span> Toggle Theme</button>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════  MAIN VIEW  ══════════════════════════ -->
+    <div class="main-content">
+
+      <!-- HEADER -->
+      <header class="top-header">
+        <div class="header-left">
+          <div class="status-pill" id="statusPill">
+            <span class="pulse-dot"></span>
+            <span id="statusText">INITIALIZING…</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="clock-block">
+            <span class="clock-label">SYS TIME</span>
+            <span class="clock-value" id="sysTime">--:--:--</span>
+          </div>
+          <div class="clock-block">
+            <span class="clock-label">UPTIME</span>
+            <span class="clock-value" id="uptime">00:00:00</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENT WRAPPER (TABS) -->
+      <div class="content-wrapper">
+
+        <!-- TAB: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-pane active">
+          <!-- AI SOC INTELLIGENCE BANNER -->
+          <div class="ai-soc-banner" id="dashboardAiBanner">
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">🤖</span> AI COMPOSITE RISK SCORE</div>
+              <div class="risk-gauge-container">
+                <div class="risk-meter-wrapper">
+                  <svg class="risk-circle-svg" viewBox="0 0 90 90">
+                    <circle class="risk-circle-bg" cx="45" cy="45" r="37"></circle>
+                    <circle class="risk-circle-progress" id="riskMeterCircleDash" cx="45" cy="45" r="37"></circle>
+                  </svg>
+                  <span class="risk-score-value" id="riskMeterScoreDash">0</span>
+                </div>
+                <div class="risk-status-details">
+                  <span class="risk-badge LOW" id="riskBadgeDash">LOW</span>
+                  <span class="risk-status-label" id="riskLabelDash">System posture normal. No active AI threats.</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">🌲</span> RANDOM FOREST ML</div>
+              <div class="ml-pred-box">
+                <span class="ml-pred-value" id="mlPredValDash">Normal <span style="font-size:0.85rem;color:#94a3b8;">(98%)</span></span>
+                <div class="ml-conf-bar-wrap"><div class="ml-conf-bar" id="mlConfBarDash" style="width: 98%;"></div></div>
+                <span style="font-size:0.75rem;color:#94a3b8;margin-top:2px;">Real-time Packet Classification</span>
+              </div>
+            </div>
+            
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">📈</span> ISOLATION FOREST</div>
+              <div class="anomaly-metric">
+                <span id="anomalyScoreDash">5.0</span><span class="anomaly-unit">%</span>
+              </div>
+              <div class="anomaly-state-pill" id="anomalyStateDash">Normal Traffic Pattern</div>
+            </div>
+            
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">🛡️</span> AUTO-RESPONSE ENGINE</div>
+              <div class="shield-status-box">
+                <span class="shield-icon">🛡️</span>
+                <div class="shield-info">
+                  <h4 id="autoShieldStatusDash">ACTIVE</h4>
+                  <p id="autoShieldDetailDash">IP Blocking & Firewall Ready</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI BAR -->
+          <div class="kpi-bar">
+            <div class="kpi-card">
+              <span class="kpi-label">TOTAL PACKETS</span>
+              <span class="kpi-value" id="kpiPackets">0</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">DATA VOLUME</span>
+              <span class="kpi-value"><span id="kpiBytes">0</span> <span class="text-xs">MB</span></span>
+            </div>
+            <div class="kpi-card accent-card">
+              <span class="kpi-label">PACKETS / SEC</span>
+              <span class="kpi-value" id="kpiPPS">0</span>
+            </div>
+            <div class="kpi-card danger-card" id="alertKpi">
+              <span class="kpi-label">CRITICAL ALERTS</span>
+              <span class="kpi-value" id="kpiAlerts">0</span>
+            </div>
+          </div>
+
+          <div class="main-grid">
+            <!-- PPS Chart -->
+            <div class="panel panel-wide">
+              <div class="panel-header">
+                <span class="panel-title">PACKET RATE (PPS)</span>
+                <span class="panel-badge live">LIVE</span>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="ppsChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Protocol Pie -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">PROTOCOL MIX</span>
+              </div>
+              <div class="chart-wrap chart-pie-wrap">
+                <canvas id="protoChart"></canvas>
+              </div>
+              <div id="protoLegend" class="proto-legend"></div>
+            </div>
+
+            <!-- Top IPs -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">TOP SOURCE IPs</span>
+              </div>
+              <div id="topIpsContainer" class="ip-list"></div>
+            </div>
+
+            <!-- Live Connections -->
+            <div class="panel panel-wide">
+              <div class="panel-header">
+                <span class="panel-title">LIVE CONNECTIONS</span>
+                <div class="panel-actions">
+                  <select id="protoFilter" class="select-ghost" onchange="applyFilter()">
+                    <option value="">ALL PRTCL</option>
+                    <option>TCP</option>
+                    <option>UDP</option>
+                    <option>ICMP</option>
+                    <option>DNS</option>
+                    <option>HTTP</option>
+                    <option>HTTPS</option>
+                    <option>ARP</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrap table-tall">
+                <table class="data-table" id="connTable">
+                  <thead>
+                    <tr>
+                      <th>TIME</th>
+                      <th>SOURCE IP</th>
+                      <th>DESTINATION IP</th>
+                      <th>PROTOCOL</th>
+                      <th>PORT</th>
+                      <th>SIZE</th>
+                    </tr>
+                  </thead>
+                  <tbody id="connBody">
+                    <tr class="empty-row">
+                      <td colspan="6">Waiting for traffic…</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: DEVICES -->
+        <section id="tab-devices" class="tab-pane">
+          <div class="panel panel-full">
+            <div class="panel-header">
+              <span class="panel-title">LAN HOST DISCOVERY</span>
+              <div class="panel-actions">
+                <span class="tag">Passive Mapping Active</span>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table" id="devicesTable">
+                <thead>
+                  <tr>
+                    <th>IP ADDRESS</th>
+                    <th>MAC ADDRESS</th>
+                    <th>VENDOR OUI</th>
+                    <th>STATUS</th>
+                    <th>LAST SEEN</th>
+                  </tr>
+                </thead>
+                <tbody id="devicesBody">
+                  <tr class="empty-row">
+                    <td colspan="5">No devices discovered yet…</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: THREAT ALERTS -->
+        <section id="tab-alerts" class="tab-pane">
+          <div class="panel panel-full">
+            <div class="panel-header">
+              <span class="panel-title">THREAT INTELLIGENCE (IDS)</span>
+              <div class="panel-actions">
+                <button class="btn-ghost" onclick="exportAlerts()">↓ EXPORT ALERTS</button>
+                <button class="btn-ghost text-red" onclick="clearAlerts()">✕ CLEAR</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table data-table-expansive" id="alertsTable">
+                <thead>
+                  <tr>
+                    <th>TIME</th>
+                    <th>SEVERITY</th>
+                    <th>RISK / ML</th>
+                    <th>THREAT TYPE</th>
+                    <th>ANALYSIS & DETAILS</th>
+                    <th>AI RECOMMENDATION & ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="alertsBody">
+                  <tr class="empty-row">
+                    <td colspan="6">No threats detected yet…</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: THREAT DETECTION -->
+        <section id="tab-threat-detection" class="tab-pane">
+          <!-- AI SOC INTELLIGENCE BANNER -->
+          <div class="ai-soc-banner" id="threatAiBanner">
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">🤖</span> AI COMPOSITE RISK SCORE</div>
+              <div class="risk-gauge-container">
+                <div class="risk-meter-wrapper">
+                  <svg class="risk-circle-svg" viewBox="0 0 90 90">
+                    <circle class="risk-circle-bg" cx="45" cy="45" r="37"></circle>
+                    <circle class="risk-circle-progress" id="riskMeterCircleThreat" cx="45" cy="45" r="37"></circle>
+                  </svg>
+                  <span class="risk-score-value" id="riskMeterScoreThreat">0</span>
+                </div>
+                <div class="risk-status-details">
+                  <span class="risk-badge LOW" id="riskBadgeThreat">LOW</span>
+                  <span class="risk-status-label" id="riskLabelThreat">System posture normal. No active AI threats.</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">🌲</span> RANDOM FOREST ML</div>
+              <div class="ml-pred-box">
+                <span class="ml-pred-value" id="mlPredValThreat">Normal <span style="font-size:0.85rem;color:#94a3b8;">(98%)</span></span>
+                <div class="ml-conf-bar-wrap"><div class="ml-conf-bar" id="mlConfBarThreat" style="width: 98%;"></div></div>
+                <span style="font-size:0.75rem;color:#94a3b8;margin-top:2px;">Real-time Packet Classification</span>
+              </div>
+            </div>
+            
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">📈</span> ISOLATION FOREST</div>
+              <div class="anomaly-metric">
+                <span id="anomalyScoreThreat">5.0</span><span class="anomaly-unit">%</span>
+              </div>
+              <div class="anomaly-state-pill" id="anomalyStateThreat">Normal Traffic Pattern</div>
+            </div>
+            
+            <div class="ai-card">
+              <div class="ai-card-title"><span class="icon">🛡️</span> AUTO-RESPONSE ENGINE</div>
+              <div class="shield-status-box">
+                <span class="shield-icon">🛡️</span>
+                <div class="shield-info">
+                  <h4 id="autoShieldStatusThreat">ACTIVE</h4>
+                  <p id="autoShieldDetailThreat">IP Blocking & Firewall Ready</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI BAR -->
+          <div class="kpi-bar">
+            <div class="kpi-card">
+              <span class="kpi-label">ACTIVE THREATS</span>
+              <span class="kpi-value" id="kpiActiveThreats">0</span>
+            </div>
+            <div class="kpi-card danger-card">
+              <span class="kpi-label">CRITICAL THREATS</span>
+              <span class="kpi-value" id="kpiCriticalThreats">0</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">THREATS TODAY</span>
+              <span class="kpi-value" id="kpiThreatsToday">0</span>
+            </div>
+            <div class="kpi-card accent-card">
+              <span class="kpi-label">AVG CONFIDENCE</span>
+              <span class="kpi-value">92<span class="text-xs">%</span></span>
+            </div>
+          </div>
+
+          <div class="main-grid">
+            <!-- Threat Timeline -->
+            <div class="panel panel-wide">
+              <div class="panel-header">
+                <span class="panel-title">THREAT TIMELINE</span>
+                <span class="panel-badge live">LIVE</span>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="threatTimelineChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Protocol Distribution -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">THREAT PROTOCOLS</span>
+              </div>
+              <div class="chart-wrap chart-pie-wrap">
+                <canvas id="threatProtoChart"></canvas>
+              </div>
+              <div id="threatProtoLegend" class="proto-legend"></div>
+            </div>
+
+            <!-- Top Attackers -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">TOP ATTACKERS</span>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table" id="attackersTable">
+                  <thead><tr><th>IP</th><th>PKTS</th><th>THREATS</th><th>SCORE</th></tr></thead>
+                  <tbody id="attackersBody"><tr class="empty-row"><td colspan="4">No attackers found</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Threat Heat Map -->
+            <div class="panel panel-wide">
+              <div class="panel-header">
+                <span class="panel-title">THREAT HEAT MAP</span>
+              </div>
+              <div class="table-wrap" id="heatMapContainer" style="padding: 20px;">
+              </div>
+            </div>
+          </div>
+          
+          <div class="panel panel-full" style="margin-top: 16px;">
+            <div class="panel-header">
+              <span class="panel-title">LIVE THREAT LOG</span>
+            </div>
+            <div class="table-wrap table-tall">
+              <table class="data-table" id="liveThreatTable">
+                <thead>
+                  <tr>
+                    <th>TIME</th>
+                    <th>SEV</th>
+                    <th>RISK / ML</th>
+                    <th>THREAT</th>
+                    <th>SRC</th>
+                    <th>DST</th>
+                    <th>PRT</th>
+                    <th>AI RECOMMENDATION & ACTION TAKEN</th>
+                  </tr>
+                </thead>
+                <tbody id="liveThreatBody">
+                  <tr class="empty-row"><td colspan="8">Monitoring for threats...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: LOGS & REPORTS -->
+        <section id="tab-logs" class="tab-pane">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">EXPORT DATA REPORTS</span>
+            </div>
+            <div style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+              <p style="color:var(--text-dim)">Export current memory session logs to local disk files. SQLite
+                integration is active and persisting automatically.</p>
+              <button class="btn-ghost btn-huge" onclick="exportTraffic()">↓ Export Raw Packets (CSV)</button>
+              <button class="btn-ghost btn-huge" onclick="exportAlerts()">↓ Export IDS Alerts (CSV)</button>
+              <button class="btn-ghost btn-huge" onclick="window.open('/export/report/json', '_blank')">↓ Export Full
+                Report (JSON)</button>
+              <button class="btn-ghost btn-huge text-accent" onclick="window.open('/export/report/pdf', '_blank')">↓
+                Export Security Report (PDF)</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: SETTINGS -->
+        <section id="tab-settings" class="tab-pane">
+          <div class="main-grid">
+            <!-- System Refresh Settings -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">GENERAL UI SETTINGS</span>
+              </div>
+              <div style="padding: 24px;">
+                <label class="setting-row">
+                  <span>Refresh Interval (ms)</span>
+                  <input type="number" id="pollInterval" class="input-ghost" value="2000" />
+                </label>
+                <p class="text-dim" style="margin-top: 10px; font-size: 0.8rem;">Note: Polling too fast may cause browser stutter. Default is 2000ms.</p>
+              </div>
+            </div>
+
+            <!-- Gmail Alert System Settings -->
+            <div class="panel panel-wide">
+              <div class="panel-header">
+                <span class="panel-title">GMAIL ALERT SYSTEM CONFIGURATION</span>
+                <span class="panel-badge online" id="smtpConnectionBadge">● READY</span>
+              </div>
+              <div style="padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <label class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+                  <span class="text-dim" style="font-size: 0.8rem; font-weight: 600;">SMTP SERVER</span>
+                  <input type="text" id="smtpServerInput" class="input-ghost" style="width: 100%;" value="smtp.gmail.com" />
+                </label>
+                <label class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+                  <span class="text-dim" style="font-size: 0.8rem; font-weight: 600;">SMTP PORT (TLS: ENABLED)</span>
+                  <input type="number" id="smtpPortInput" class="input-ghost" style="width: 100%;" value="587" />
+                </label>
+                <label class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+                  <span class="text-dim" style="font-size: 0.8rem; font-weight: 600;">SENDER EMAIL</span>
+                  <input type="email" id="smtpSenderInput" class="input-ghost" style="width: 100%;" value="ariprakash32@gmail.com" />
+                </label>
+                <label class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+                  <span class="text-dim" style="font-size: 0.8rem; font-weight: 600;">RECIPIENT EMAIL</span>
+                  <input type="email" id="smtpRecipientInput" class="input-ghost" style="width: 100%;" value="ariprakash32@gmail.com" />
+                </label>
+                <label class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 6px; grid-column: span 2;">
+                  <span class="text-dim" style="font-size: 0.8rem; font-weight: 600;">GMAIL APP PASSWORD (16 CHARACTERS, MASKED)</span>
+                  <input type="password" id="smtpPasswordInput" class="input-ghost" style="width: 100%;" placeholder="******** (Loaded securely from .env)" />
+                  <span style="font-size: 0.75rem; color: var(--text-dim);">Always securely loaded from .env. Inputting here updates runtime memory session.</span>
+                </label>
+              </div>
+              <div style="padding: 0 24px 24px; display: flex; justify-content: flex-end; gap: 12px;">
+                <button class="btn-ghost" id="sendTestEmailBtn" onclick="sendTestEmail()"><span class="icon">✉️</span> Send Test Email</button>
+                <button class="btn-ghost text-accent" onclick="saveEmailSettings()"><span class="icon">💾</span> Save Configuration</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Email Audit Logs -->
+          <div class="panel panel-full" style="margin-top: 20px;">
+            <div class="panel-header">
+              <span class="panel-title">EMAIL NOTIFICATION AUDIT LOGS (SQLITE WAL)</span>
+              <div class="panel-actions">
+                <button class="btn-ghost" onclick="refreshEmailLogs(this)">↻ Refresh Logs</button>
+              </div>
+            </div>
+            <div class="table-wrap table-tall">
+              <table class="data-table" id="emailLogsTable">
+                <thead>
+                  <tr>
+                    <th>TIMESTAMP</th>
+                    <th>RECIPIENT</th>
+                    <th>SUBJECT</th>
+                    <th>STATUS</th>
+                    <th>ERROR MESSAGE / DETAILS</th>
+                  </tr>
+                </thead>
+                <tbody id="emailLogsBody">
+                  <tr class="empty-row">
+                    <td colspan="5">Loading email audit logs...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERT TOAST -->
+  <div id="alertToast" class="alert-toast hidden"></div>
+
+  <script src="/static/js/dashboard.js"></script>
+</body>
+
+</html>

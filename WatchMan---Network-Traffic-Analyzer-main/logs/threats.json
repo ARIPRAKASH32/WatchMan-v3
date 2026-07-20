@@ -1,0 +1,245 @@
+[
+  {
+    "type": "SSH Brute Force",
+    "detail": "AI detected SSH Brute Force (Conf: 78.0%, Anomaly: 33.7%)",
+    "severity": "MEDIUM",
+    "confidence": 78,
+    "mitigation": "Review AI recommendations and inspect packet flow.",
+    "src": "192.168.1.206",
+    "dst": "224.0.0.22",
+    "proto": "OTHER",
+    "time": "2026-07-17 15:07:26",
+    "ml_prediction": "SSH Brute Force",
+    "anomaly_score": 33.7,
+    "risk_score": 59,
+    "risk_level": "Medium",
+    "recommendations": {
+      "attack_type": "SSH Brute Force",
+      "reason": "AI detected SSH Brute Force (Conf: 78.0%, Anomaly: 33.7%). Repeated high-frequency TCP connection attempts targeting port 22 (SSH). The attacker is attempting automated dictionary or credential guessing attacks.",
+      "risk_score": 59,
+      "recommended_actions": [
+        "Immediately block the source IP or install/enable Fail2Ban or DenyHosts.",
+        "Disable password authentication on SSH and mandate SSH RSA/ED25519 key-based logins only.",
+        "Change SSH listening port to a non-standard port or restrict SSH access via VPN/Allowlist.",
+        "Inspect system authentication logs (`/var/log/auth.log` or `/var/log/secure`) for successful logins."
+      ]
+    },
+    "action_taken": "Monitored / No auto-response required"
+  },
+  {
+    "type": "SSH Brute Force",
+    "detail": "AI detected SSH Brute Force (Conf: 78.0%, Anomaly: 33.4%)",
+    "severity": "MEDIUM",
+    "confidence": 78,
+    "mitigation": "Review AI recommendations and inspect packet flow.",
+    "src": "192.168.1.206",
+    "dst": "224.0.0.22",
+    "proto": "OTHER",
+    "time": "2026-07-17 15:07:26",
+    "ml_prediction": "SSH Brute Force",
+    "anomaly_score": 33.4,
+    "risk_score": 59,
+    "risk_level": "Medium",
+    "recommendations": {
+      "attack_type": "SSH Brute Force",
+      "reason": "AI detected SSH Brute Force (Conf: 78.0%, Anomaly: 33.4%). Repeated high-frequency TCP connection attempts targeting port 22 (SSH). The attacker is attempting automated dictionary or credential guessing attacks.",
+      "risk_score": 59,
+      "recommended_actions": [
+        "Immediately block the source IP or install/enable Fail2Ban or DenyHosts.",
+        "Disable password authentication on SSH and mandate SSH RSA/ED25519 key-based logins only.",
+        "Change SSH listening port to a non-standard port or restrict SSH access via VPN/Allowlist.",
+        "Inspect system authentication logs (`/var/log/auth.log` or `/var/log/secure`) for successful logins."
+      ]
+    },
+    "action_taken": "Monitored / No auto-response required"
+  },
+  {
+    "type": "DoS",
+    "detail": "AI detected DoS (Conf: 100.0%, Anomaly: 28.7%)",
+    "severity": "HIGH",
+    "confidence": 100,
+    "mitigation": "Review AI recommendations and inspect packet flow.",
+    "src": "10.238.74.185",
+    "dst": "185.125.190.99",
+    "proto": "HTTP",
+    "time": "2026-07-17 15:28:22",
+    "ml_prediction": "DoS",
+    "anomaly_score": 28.7,
+    "risk_score": 82,
+    "risk_level": "Critical",
+    "recommendations": {
+      "attack_type": "DoS",
+      "reason": "AI detected DoS (Conf: 100.0%, Anomaly: 28.7%). High-velocity packet flood detected (SYN flood or HTTP volume surge) exceeding safe thresholds, aiming to exhaust server CPU or bandwidth resources.",
+      "risk_score": 82,
+      "recommended_actions": [
+        "Enable SYN Cookies (`sysctl -w net.ipv4.tcp_syncookies=1`) and TCP rate limiting.",
+        "Apply upstream DDoS mitigation or rate limit the offending source IP (`iptables limit`).",
+        "Configure Web Application Firewall (WAF) challenge/challenge-response for high-frequency requests.",
+        "Verify connection backlog limits and scale backend infrastructure if needed."
+      ]
+    },
+    "action_taken": "Blocked IP 10.238.74.185 via iptables | Rule written to block_rules.sh"
+  },
+  {
+    "type": "DoS Attack",
+    "detail": "10.238.74.185 sent 80 packets in 10s (threshold: 80) -> 57.144.57.32",
+    "severity": "HIGH",
+    "confidence": 80,
+    "mitigation": "Enable rate limiting",
+    "src": "10.238.74.185",
+    "dst": "57.144.57.32",
+    "proto": "HTTPS",
+    "time": "2026-07-17 15:28:25",
+    "ml_prediction": "Normal",
+    "anomaly_score": 23.6,
+    "risk_score": 65,
+    "risk_level": "High",
+    "recommendations": {
+      "attack_type": "DoS Attack",
+      "reason": "10.238.74.185 sent 80 packets in 10s (threshold: 80) -> 57.144.57.32. High-velocity packet flood detected (SYN flood or HTTP volume surge) exceeding safe thresholds, aiming to exhaust server CPU or bandwidth resources.",
+      "risk_score": 65,
+      "recommended_actions": [
+        "Enable SYN Cookies (`sysctl -w net.ipv4.tcp_syncookies=1`) and TCP rate limiting.",
+        "Apply upstream DDoS mitigation or rate limit the offending source IP (`iptables limit`).",
+        "Configure Web Application Firewall (WAF) challenge/challenge-response for high-frequency requests.",
+        "Verify connection backlog limits and scale backend infrastructure if needed."
+      ]
+    },
+    "action_taken": "Monitored / No auto-response required"
+  },
+  {
+    "type": "DoS Attack",
+    "detail": "57.144.57.32 sent 80 packets in 10s (threshold: 80) -> 10.238.74.185",
+    "severity": "HIGH",
+    "confidence": 80,
+    "mitigation": "Enable rate limiting",
+    "src": "57.144.57.32",
+    "dst": "10.238.74.185",
+    "proto": "TCP",
+    "time": "2026-07-17 15:28:29",
+    "ml_prediction": "Normal",
+    "anomaly_score": 53.7,
+    "risk_score": 65,
+    "risk_level": "High",
+    "recommendations": {
+      "attack_type": "DoS Attack",
+      "reason": "57.144.57.32 sent 80 packets in 10s (threshold: 80) -> 10.238.74.185. High-velocity packet flood detected (SYN flood or HTTP volume surge) exceeding safe thresholds, aiming to exhaust server CPU or bandwidth resources.",
+      "risk_score": 65,
+      "recommended_actions": [
+        "Enable SYN Cookies (`sysctl -w net.ipv4.tcp_syncookies=1`) and TCP rate limiting.",
+        "Apply upstream DDoS mitigation or rate limit the offending source IP (`iptables limit`).",
+        "Configure Web Application Firewall (WAF) challenge/challenge-response for high-frequency requests.",
+        "Verify connection backlog limits and scale backend infrastructure if needed."
+      ]
+    },
+    "action_taken": "Monitored / No auto-response required"
+  },
+  {
+    "type": "DoS",
+    "detail": "AI detected DoS (Conf: 100.0%, Anomaly: 29.9%)",
+    "severity": "HIGH",
+    "confidence": 100,
+    "mitigation": "Review AI recommendations and inspect packet flow.",
+    "src": "10.238.74.185",
+    "dst": "91.189.91.98",
+    "proto": "HTTP",
+    "time": "2026-07-17 15:33:22",
+    "ml_prediction": "DoS",
+    "anomaly_score": 29.9,
+    "risk_score": 82,
+    "risk_level": "Critical",
+    "recommendations": {
+      "attack_type": "DoS",
+      "reason": "AI detected DoS (Conf: 100.0%, Anomaly: 29.9%). High-velocity packet flood detected (SYN flood or HTTP volume surge) exceeding safe thresholds, aiming to exhaust server CPU or bandwidth resources.",
+      "risk_score": 82,
+      "recommended_actions": [
+        "Enable SYN Cookies (`sysctl -w net.ipv4.tcp_syncookies=1`) and TCP rate limiting.",
+        "Apply upstream DDoS mitigation or rate limit the offending source IP (`iptables limit`).",
+        "Configure Web Application Firewall (WAF) challenge/challenge-response for high-frequency requests.",
+        "Verify connection backlog limits and scale backend infrastructure if needed."
+      ]
+    },
+    "action_taken": "IP 10.238.74.185 already blocked by previous rule"
+  },
+  {
+    "type": "DNS Attack",
+    "detail": "AI detected DNS Attack (Conf: 80.0%, Anomaly: 47.6%)",
+    "severity": "MEDIUM",
+    "confidence": 80,
+    "mitigation": "Review AI recommendations and inspect packet flow.",
+    "src": "10.238.74.28",
+    "dst": "10.238.74.185",
+    "proto": "DNS",
+    "time": "2026-07-20 05:06:59",
+    "ml_prediction": "DNS Attack",
+    "anomaly_score": 47.6,
+    "risk_score": 62,
+    "risk_level": "High",
+    "recommendations": {
+      "attack_type": "DNS Attack",
+      "reason": "AI detected DNS Attack (Conf: 80.0%, Anomaly: 47.6%). Abnormal volume of DNS requests/responses or oversized UDP packet payloads on port 53 indicating a DNS Amplification/Reflection attack or tunneling.",
+      "risk_score": 62,
+      "recommended_actions": [
+        "Disable recursion on authoritative DNS servers to prevent amplification abuse.",
+        "Implement Response Rate Limiting (RRL) on DNS servers.",
+        "Inspect DNS query payloads for unauthorized tunneling or exfiltration domains.",
+        "Filter out-of-state UDP traffic at the firewall."
+      ]
+    },
+    "action_taken": "Monitored / No auto-response required"
+  },
+  {
+    "type": "DNS Attack",
+    "detail": "AI detected DNS Attack (Conf: 82.0%, Anomaly: 48.4%)",
+    "severity": "MEDIUM",
+    "confidence": 82,
+    "mitigation": "Review AI recommendations and inspect packet flow.",
+    "src": "10.238.74.28",
+    "dst": "10.238.74.185",
+    "proto": "DNS",
+    "time": "2026-07-20 05:09:25",
+    "ml_prediction": "DNS Attack",
+    "anomaly_score": 48.4,
+    "risk_score": 63,
+    "risk_level": "High",
+    "recommendations": {
+      "attack_type": "DNS Attack",
+      "reason": "AI detected DNS Attack (Conf: 82.0%, Anomaly: 48.4%). Abnormal volume of DNS requests/responses or oversized UDP packet payloads on port 53 indicating a DNS Amplification/Reflection attack or tunneling.",
+      "risk_score": 63,
+      "recommended_actions": [
+        "Disable recursion on authoritative DNS servers to prevent amplification abuse.",
+        "Implement Response Rate Limiting (RRL) on DNS servers.",
+        "Inspect DNS query payloads for unauthorized tunneling or exfiltration domains.",
+        "Filter out-of-state UDP traffic at the firewall."
+      ]
+    },
+    "action_taken": "Monitored / No auto-response required"
+  },
+  {
+    "type": "DoS",
+    "detail": "AI detected DoS (Conf: 100.0%, Anomaly: 30.8%)",
+    "severity": "HIGH",
+    "confidence": 100,
+    "mitigation": "Review AI recommendations and inspect packet flow.",
+    "src": "10.238.74.185",
+    "dst": "185.125.190.99",
+    "proto": "HTTP",
+    "time": "2026-07-20 05:11:03",
+    "ml_prediction": "DoS",
+    "anomaly_score": 30.8,
+    "risk_score": 82,
+    "risk_level": "Critical",
+    "recommendations": {
+      "attack_type": "DoS",
+      "reason": "AI detected DoS (Conf: 100.0%, Anomaly: 30.8%). High-velocity packet flood detected (SYN flood or HTTP volume surge) exceeding safe thresholds, aiming to exhaust server CPU or bandwidth resources.",
+      "risk_score": 82,
+      "recommended_actions": [
+        "Enable SYN Cookies (`sysctl -w net.ipv4.tcp_syncookies=1`) and TCP rate limiting.",
+        "Apply upstream DDoS mitigation or rate limit the offending source IP (`iptables limit`).",
+        "Configure Web Application Firewall (WAF) challenge/challenge-response for high-frequency requests.",
+        "Verify connection backlog limits and scale backend infrastructure if needed."
+      ]
+    },
+    "action_taken": "Blocked IP 10.238.74.185 via iptables | Rule written to block_rules.sh"
+  }
+]

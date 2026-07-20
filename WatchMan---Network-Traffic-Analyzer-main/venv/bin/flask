@@ -1,0 +1,6 @@
+#!/data/professional/WatchMan_v2/WatchMan---Network-Traffic-Analyzer-main/venv/bin/python
+import sys
+from flask.cli import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())

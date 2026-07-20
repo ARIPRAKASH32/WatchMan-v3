@@ -1,0 +1,58 @@
+graph TD
+    subgraph Capture["Live Network & Packet Capture Layer"]
+        A[Raw Interface / Pcap / Scapy] -->|Capture Packet| B(Sniffer Engine: capture.py)
+        B -->|Enqueue Pkt Info| C[Packet Queue _pkt_queue]
+    end
+
+    subgraph FeatureEng["AI Feature Engineering & Flow Tracking"]
+        C -->|Pop Pkt Info| D[Flow Tracker: flow_tracker.py]
+        C -->|Pop Pkt Info| E[PacketFeatureExtractor: detector/feature_extractor.py]
+        E -->|Calculate 8D Vector| F[Numerical Feature Vector]
+        F -->|[proto, ports, size, flags, duration, bps, pps]| G(ML Bridge / Model Manager)
+    end
+
+    subgraph MLEngine["Machine Learning Detection Engine (detector/ml_models.py)"]
+        G -->|Classification Vector| H[RandomForest Classifier]
+        G -->|Anomaly Vector| I[IsolationForest Anomaly Detector]
+        H -->|Class: DoS/PortScan/BruteForce/Normal + Conf %| J(AI Detection Results)
+        I -->|Anomaly Score %| J
+    end
+
+    subgraph RuleEngine["Signature & Rule-Based IDS Engine"]
+        C -->|Check Protocol & Flags| K1[DoS Check: dos.py]
+        C -->|Check Port Sweeps| K2[PortScan Check: portscan.py]
+        C -->|Check ARP Tables| K3[ARP Spoof Check: arp.py]
+        C -->|Check SSH Attempts| K4[BruteForce Check: bruteforce.py]
+        C -->|Check Payload Sigs| K5[Signature Check: signatures.py]
+        K1 & K2 & K3 & K4 & K5 -->|Rule Alerts List| L[Combined Alert Candidates]
+    end
+
+    subgraph AISOC["AI Risk & Recommendation Engine"]
+        J & L --> M[RiskEngine: detector/risk_engine.py]
+        M -->|Weighted Risk Score 0-100 & Level| N[RecommendationEngine: detector/recommendation_engine.py]
+        N -->|Structured SOC Advice & Mitigation| O[Enriched IDRS Alert Object]
+    end
+
+    subgraph ResponseLayer["Automated Response & Multi-Channel Alerting"]
+        O -->|If Risk > 80| P[AutoResponseEngine: detector/auto_response.py]
+        P -->|iptables / firewall block & rate limit| Q[System Network Stack]
+        O -->|Anti-Flood Throttling| R[AlertManager: detector/alert_manager.py]
+        R -->|SMTP Protocol| S1[Email Alert Dispatcher]
+        R -->|Twilio API| S2[SMS & Voice Call Dispatcher]
+    end
+
+    subgraph Persistence["State & Database Layer"]
+        O & P --> T[Thread-Safe In-Memory Ring Buffer: models/data_store.py]
+        T -->|Async Batch Worker| U[(SQLite WAL Database: logs/watchman.db)]
+        T -->|Export Pipeline| V[Report Generator: utils/reporter.py]
+        V -->|Format Output| W[JSON / CSV / PDF Reports]
+    end
+
+    subgraph Frontend["Real-Time Dashboard UI (Flask / Chart.js)"]
+        X[Flask REST API & WebSocket polling: app.py] <-->|Fetch /api/risk_score, /api/ml_prediction, /alerts| T
+        X <--> Y[Dashboard Web App: templates/index.html & static/js/dashboard.js]
+        Y -->|Render| Z1[AI Risk Score Gauge & Status]
+        Y -->|Render| Z2[Random Forest Classification & Confidence Bar]
+        Y -->|Render| Z3[Isolation Forest Anomaly Card]
+        Y -->|Render| Z4[Auto-Response Shield Indicator & Threat Timeline]
+    end

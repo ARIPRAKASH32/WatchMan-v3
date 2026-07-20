@@ -1,0 +1,19 @@
+{
+  "incident": {
+    "threat": "Multiple Correlated Threats (Possible Network Intrusion)",
+    "risk_score": 66,
+    "risk_level": "High",
+    "ai_confidence": 100,
+    "ai_explanation": "\u2022 Complex intrusion pattern involving DoS Attack, TCP SYN Flood.\n\u2022 Target asset 192.168.1.10 is marked as high-value/critical.",
+    "time": "2026-07-16 21:21:08",
+    "timestamp": 1784217068,
+    "src": "185.220.101.5",
+    "dst": "192.168.1.10",
+    "proto": "TCP",
+    "mitigation": "Enable TCP SYN cookies",
+    "underlying_alerts": 3,
+    "id": "INC-A83A96B7"
+  },
+  "flow_statistics": "Extracted flow stats placeholder",
+  "network_metadata": "Metadata placeholder"
+}

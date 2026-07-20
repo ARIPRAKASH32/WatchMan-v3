@@ -1,0 +1,50 @@
+### IDRS Configuration
+
+# Capture mode
+demo_mode: false  # Set to true for simulated traffic
+
+# Feature extraction settings
+feature_extraction:
+  flow_timeout_seconds: 30  # Flow expiration timeout
+  max_flows_tracked: 10000
+
+# Machine Learning model paths
+ml_models:
+  random_forest: "models/random_forest.pkl"
+  isolation_forest: "models/isolation_forest.pkl"
+
+# Risk engine weightings (must sum to 1.0)
+risk_engine:
+  rule_based_weight: 0.4
+  random_forest_weight: 0.4
+  isolation_forest_weight: 0.2
+
+# Alert thresholds
+alerts:
+  risk_score_threshold: 80
+
+# Email alert settings (loaded dynamically with .env fallback)
+email:
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  use_tls: true
+  username: "ariprakash32@gmail.com"
+  password: "gwcrpqhejjwsolbk"
+  from_address: "ariprakash32@gmail.com"
+  to_address: "ariprakash741@gmail.com"
+
+# Auto-response settings
+auto_response:
+  enable_ip_block: true
+  enable_firewall_rule: false
+  enable_rate_limit: false
+  block_method: "iptables"  # Options: iptables, ufw
+  rate_limit_interface: "eth0"
+  rate_limit_rate: "1000kbps"
+
+# Logging settings
+logging:
+  level: "INFO"
+  file: "logs/watchman_idrs.log"
+  max_bytes: 5242880  # 5 MB
+  backup_count: 3
